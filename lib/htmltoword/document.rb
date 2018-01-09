@@ -1,9 +1,9 @@
 module Htmltoword
   class Document
 
-    DOC_XML_FILE = "word/document.xml"
+    DOC_XML_FILE = 'word/document.xml'
     BASIC_PATH = ::Htmltoword.root
-    FILE_EXTENSION = ".docx"
+    FILE_EXTENSION = '.docx'
     XSLT_TEMPLATE = File.join(BASIC_PATH, 'xslt', 'html_to_wordml.xslt')
 
     class << self
@@ -33,18 +33,10 @@ module Htmltoword
       @file_name
     end
 
-    #
-    # It creates missing folders if needed, creates a new zip/word file on the
-    # specified location, copies all the files from the template word document
-    # and replace the content of the ones to be replaced.
-    # It will create a tempfile and return it. The rails app using the gem
-    # should decide what to do with it.
-    #
-    #
     def save
-      Tempfile.open([file_name, FILE_EXTENSION], :type => 'application/zip') do |output_file|
-        Zip::File.open(@template_path) do |template_zip|
-          Zip::OutputStream.open(output_file.path) do |out|
+      Tempfile.open([file_name, FILE_EXTENSION].join(''), Dir::tmpdir) do |output_file|
+        Zip::ZipFile.open(@template_path) do |template_zip|
+          Zip::ZipOutputStream.open(output_file.path) do |out|
             template_zip.each do |entry|
               out.put_next_entry entry.name
               if @replaceable_files[entry.name]
@@ -55,14 +47,15 @@ module Htmltoword
             end
           end
         end
-        output_file
+
+        return output_file
       end
     end
 
     def replace_file html, file_name=DOC_XML_FILE
-      source = Nokogiri::HTML(html.gsub(/>\s+</, "><"))
-      xslt = Nokogiri::XSLT( File.read(XSLT_TEMPLATE) )
-      source = xslt.transform( source ) unless (source/"/html").blank?
+      source = Nokogiri::HTML(html.gsub(/>\s+</, '><'))
+      xslt = Nokogiri::XSLT(File.read(XSLT_TEMPLATE))
+      source = xslt.transform(source) unless (source/'/html').blank?
       @replaceable_files[file_name] = source.to_s
     end
 
