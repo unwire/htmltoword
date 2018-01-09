@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'htmltoword/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "htmltoword"
+  spec.name          = "htmltoword-compatibility"
   spec.version       = Htmltoword::VERSION
   spec.authors       = ["Nicholas Frandsen, Cristina Matonte"]
   spec.email         = ["nick.rowe.frandsen@gmail.com, anitsirc1@gmail.com"]
@@ -25,5 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
-  
+
 end
