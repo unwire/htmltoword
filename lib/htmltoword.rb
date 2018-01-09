@@ -2,7 +2,7 @@
 require "action_controller"
 require "action_view"
 require "nokogiri"
-require "zip"
+require "zip/zip"
 
 module Htmltoword
   def self.root

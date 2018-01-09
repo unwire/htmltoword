@@ -42,7 +42,7 @@ module Htmltoword
     #
     #
     def save
-      Tempfile.open([file_name, FILE_EXTENSION], type: 'application/zip') do |output_file|
+      Tempfile.open([file_name, FILE_EXTENSION], :type => 'application/zip') do |output_file|
         Zip::File.open(@template_path) do |template_zip|
           Zip::OutputStream.open(output_file.path) do |out|
             template_zip.each do |entry|
